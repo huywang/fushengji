@@ -1,4 +1,5 @@
 import type { Effect, GameState, PlayerState, Requirement, RouteScores, SkillState } from "./types";
+import { clonePlain } from "./clone";
 
 const playerRanges: Partial<Record<keyof PlayerState, [number, number]>> = {
   stamina: [0, 100],
@@ -56,7 +57,7 @@ export function addLog(state: GameState, title: string, text: string, kind: Game
 }
 
 export function applyEffect(state: GameState, effect: Effect): GameState {
-  const next: GameState = structuredClone(state);
+  const next: GameState = clonePlain(state);
   if (effect.type === "receivable") {
     const amount = Math.max(0, Math.round(effect.delta ?? 0));
     if (amount <= 0) return next;

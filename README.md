@@ -11,9 +11,20 @@ npm run dev
 
 打开终端输出的本地地址即可游玩。
 
+## 微信小程序
+
+```bash
+cd miniprogram
+npm install
+npm run build:weapp
+```
+
+用微信开发者工具导入 `miniprogram` 目录。当前 `project.config.json` 使用游客 AppID，本地预览可用；正式上线前需要替换为自己的小程序 AppID，并在微信后台完成类目、隐私协议和版本提审。
+
 ## 已实现
 
 - React + TypeScript + Vite 单机 Web 版
+- Taro + React 微信小程序版，复用同一套游戏引擎和数据
 - localStorage 存档、读档、重开
 - 8 个北京地点
 - 24 个可选行动

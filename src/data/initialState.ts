@@ -1,4 +1,5 @@
 import type { GameState, PlayerState, RouteScores } from "../engine/types";
+import { clonePlain } from "../engine/clone";
 
 export const initialPlayer: PlayerState = {
   cash: 186000,
@@ -56,7 +57,7 @@ export function createInitialState(): GameState {
     activeOpportunities: [],
     completedOpportunityIds: [],
     receivables: [],
-    player: structuredClone(initialPlayer),
+    player: clonePlain(initialPlayer),
     flags: {},
     history: [
       {
@@ -85,7 +86,7 @@ export function normalizeGameState(state: GameState): GameState {
     completedOpportunityIds: Array.isArray(state.completedOpportunityIds) ? state.completedOpportunityIds : [],
     receivables: Array.isArray(state.receivables) ? state.receivables : [],
     player: {
-      ...structuredClone(initialPlayer),
+      ...clonePlain(initialPlayer),
       ...savedPlayer,
       skills: {
         ...initialPlayer.skills,
