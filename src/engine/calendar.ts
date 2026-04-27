@@ -40,6 +40,19 @@ export function cashRunwayDays(state: GameState): number {
   return Math.max(0, Math.floor(state.player.availableCash / dailyCost));
 }
 
+export function dayOfWeekIndex(day: number): number {
+  return (day - 1) % 7;
+}
+
+export function isWeekend(day: number): boolean {
+  const index = dayOfWeekIndex(day);
+  return index === 5 || index === 6;
+}
+
+export function dayOfWeekLabel(day: number): string {
+  return ["周一", "周二", "周三", "周四", "周五", "周六", "周日"][dayOfWeekIndex(day)];
+}
+
 export function pressureWarnings(state: GameState): string[] {
   const warnings: string[] = [];
   const deadline = nextDeadline(state.day);

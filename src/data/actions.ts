@@ -33,6 +33,7 @@ export const actions: GameAction[] = [
     name: "假装上班",
     locationId: "huilongguan",
     description: "照常背包出门，去咖啡馆和人生开复盘会。",
+    availability: { periods: ["morning"], reason: "假装上班必须赶早高峰，晚上出门就不像上班了。" },
     effects: [
       { type: "stat", key: "dignity", delta: 2 },
       { type: "stat", key: "anxiety", delta: 6 },
@@ -46,6 +47,7 @@ export const actions: GameAction[] = [
     name: "去西二旗面试",
     locationId: "xierqi",
     description: "坐 13 号线去聊高强度、强 owner 意识和薪资倒挂。",
+    availability: { periods: ["morning", "afternoon"], weekdaysOnly: true, reason: "面试通常安排在工作日白天，晚上 HR 也下班了。" },
     effects: [
       { type: "stat", key: "stamina", delta: -18 },
       { type: "stat", key: "emotion", delta: -8 },
@@ -59,6 +61,7 @@ export const actions: GameAction[] = [
     name: "去国贸见猎头",
     locationId: "guomao",
     description: "一杯咖啡，一套话术，一个比之前低很多的数字。",
+    availability: { periods: ["afternoon"], weekdaysOnly: true, reason: "国贸猎头局一般在工作日下午，晚上只剩贵和堵。" },
     effects: [
       { type: "cash", key: "availableCash", delta: -68 },
       { type: "stat", key: "cash", delta: -68 },
@@ -75,6 +78,7 @@ export const actions: GameAction[] = [
     name: "找前同事内推",
     locationId: "wangjing",
     description: "把“不好意思”吞下去，换一个内推码。",
+    availability: { periods: ["afternoon", "evening"], weekdaysOnly: true, reason: "前同事白天在会里，周末通常不想聊工作。" },
     effects: [
       { type: "stat", key: "dignity", delta: -4 },
       { type: "stat", key: "midlifeThickSkin", delta: 2 },
@@ -88,6 +92,7 @@ export const actions: GameAction[] = [
     name: "领取离职材料",
     locationId: "wangjing",
     description: "拿回工牌、证明、交接单，以及一点被系统删除的实感。",
+    availability: { periods: ["morning", "afternoon"], weekdaysOnly: true, reason: "离职材料要找 HR，晚上和周末没人盖章。" },
     effects: [
       { type: "stat", key: "emotion", delta: -4 },
       { type: "stat", key: "dignity", delta: -2 },
@@ -115,6 +120,7 @@ export const actions: GameAction[] = [
     name: "做自由职业客户拜访",
     locationId: "zhongguancun",
     description: "讲交付周期、讲付款节点，最重要的是讲清楚要先付定金。",
+    availability: { periods: ["morning", "afternoon"], weekdaysOnly: true, reason: "客户拜访要赶对方上班时间，晚上容易变成空聊。" },
     effects: [
       { type: "cash", key: "availableCash", delta: -45 },
       { type: "stat", key: "cash", delta: -45 },
@@ -185,6 +191,7 @@ export const actions: GameAction[] = [
     name: "家庭现金流会议",
     locationId: "huilongguan",
     description: "把房贷、补课、社保和外卖摊到桌上。",
+    availability: { periods: ["evening"], reason: "家庭现金流会议只能等大家都回到家，白天没人有心情开这个会。" },
     effects: [
       { type: "stat", key: "emotion", delta: -8 },
       { type: "stat", key: "dignity", delta: -6 },
@@ -202,6 +209,7 @@ export const actions: GameAction[] = [
     name: "和伴侣坦白",
     locationId: "huilongguan",
     description: "把组织优化说出口，也把自己从谎言里放出来。",
+    availability: { periods: ["evening"], reason: "这种话适合晚上在家说，不适合用微信扔过去。" },
     effects: [
       { type: "stat", key: "dignity", delta: -8 },
       { type: "stat", key: "emotion", delta: -6 },
@@ -219,6 +227,7 @@ export const actions: GameAction[] = [
     name: "继续隐瞒",
     locationId: "huilongguan",
     description: "体面短暂上涨，焦虑按复利增长。",
+    availability: { periods: ["morning"], reason: "隐瞒最需要早上演出，晚上只剩圆谎。" },
     effects: [
       { type: "stat", key: "dignity", delta: 3 },
       { type: "stat", key: "familyTrust", delta: -6 },
@@ -234,6 +243,7 @@ export const actions: GameAction[] = [
     name: "陪孩子写作业",
     locationId: "huilongguan",
     description: "一道应用题，两个成年人没说出口的生活题。",
+    availability: { periods: ["evening"], reason: "孩子白天上学，作业通常在晚上等你。" },
     effects: [
       { type: "stat", key: "stamina", delta: -6 },
       { type: "stat", key: "emotion", delta: 3 },
@@ -248,6 +258,11 @@ export const actions: GameAction[] = [
     name: "陪孩子上课",
     locationId: "haidianhuangzhuang",
     description: "补课班门口的空气里，有更贵的焦虑。",
+    availability: {
+      weekdayPeriods: ["evening"],
+      weekendPeriods: ["morning", "afternoon"],
+      reason: "补课班工作日多在晚上，周末才有白天大课。",
+    },
     effects: [
       { type: "cash", key: "availableCash", delta: -300 },
       { type: "stat", key: "cash", delta: -300 },
@@ -264,6 +279,7 @@ export const actions: GameAction[] = [
     name: "取消一个补课班",
     locationId: "haidianhuangzhuang",
     description: "把固定支出砍掉一块，也把焦虑换了个形状。",
+    availability: { periods: ["afternoon", "evening"], reason: "退课要等机构有人处理，太早没人接，太晚只剩销售话术。" },
     requirements: [{ type: "flag", key: "cashflow_meeting_done", value: true }],
     effects: [
       { type: "stat", key: "monthlyFixedCost", delta: -3600 },
@@ -278,6 +294,7 @@ export const actions: GameAction[] = [
     name: "咨询社保",
     locationId: "shebao",
     description: "成年人最后的连续剧：不断缴。",
+    availability: { periods: ["morning", "afternoon"], weekdaysOnly: true, reason: "社保中心只在工作日白天办理，晚上窗口不会为中年危机加班。" },
     effects: [
       { type: "stat", key: "stamina", delta: -8 },
       { type: "stat", key: "emotion", delta: -3 },
@@ -292,6 +309,7 @@ export const actions: GameAction[] = [
     name: "缴纳灵活就业社保",
     locationId: "shebao",
     description: "一笔钱换一段安全感。",
+    availability: { periods: ["morning", "afternoon"], weekdaysOnly: true, reason: "灵活就业社保要在工作日白天办，政务大厅晚上不开门。" },
     requirements: [{ type: "flag", key: "knows_social_security_options", value: true }],
     effects: [
       { type: "cash", key: "availableCash", delta: -2500 },
@@ -307,6 +325,7 @@ export const actions: GameAction[] = [
     name: "运动",
     locationId: "huilongguan",
     description: "跑步时不用回复消息，这是今天最像自由的十分钟。",
+    availability: { periods: ["morning", "evening"], reason: "运动可以很早或很晚，中午在北京跑步更像自我惩罚。" },
     effects: [
       { type: "stat", key: "stamina", delta: -5 },
       { type: "stat", key: "health", delta: 5 },
@@ -343,6 +362,7 @@ export const actions: GameAction[] = [
     name: "去中关村见创业朋友",
     locationId: "zhongguancun",
     description: "BP 最成熟的部分，是文件名。",
+    availability: { periods: ["afternoon", "evening"], reason: "创业朋友上午通常还在补觉或改 BP，下午以后才开始谈万亿市场。" },
     effects: [
       { type: "cash", key: "availableCash", delta: -45 },
       { type: "stat", key: "cash", delta: -45 },
@@ -357,6 +377,7 @@ export const actions: GameAction[] = [
     name: "回老家看看",
     locationId: "station",
     description: "退路不在地图上，在 12306 里。",
+    availability: { periods: ["morning"], reason: "回老家至少要留出一天，晚上才出发就只能带着焦虑过夜。" },
     effects: [
       { type: "cash", key: "availableCash", delta: -900 },
       { type: "stat", key: "cash", delta: -900 },
@@ -372,6 +393,7 @@ export const actions: GameAction[] = [
     name: "卖车咨询",
     locationId: "huilongguan",
     description: "不是想卖车，是想知道生活还剩几个可变现按钮。",
+    availability: { periods: ["morning", "afternoon"], reason: "二手车商晚上不验车，最多给你一个更低的口头价。" },
     effects: [
       { type: "stat", key: "dignity", delta: -5 },
       { type: "stat", key: "mortgagePressure", delta: -3 },

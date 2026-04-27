@@ -104,10 +104,20 @@ export interface GameAction {
   name: string;
   locationId: string;
   description: string;
+  availability?: ActionAvailability;
   requirements?: Requirement[];
   effects: Effect[];
   possibleEventIds?: string[];
   routeScoreEffects?: Partial<RouteScores>;
+}
+
+export interface ActionAvailability {
+  periods?: Period[];
+  weekdayPeriods?: Period[];
+  weekendPeriods?: Period[];
+  weekdaysOnly?: boolean;
+  weekendsOnly?: boolean;
+  reason?: string;
 }
 
 export interface EventTrigger {

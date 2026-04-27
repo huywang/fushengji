@@ -1,7 +1,7 @@
 import type { Dispatch, SetStateAction } from "react";
-import { actions } from "../data/actions";
 import { locations } from "../data/locations";
-import { getAvailableActions, performAction } from "../engine/actionResolver";
+import { getLocationActionOptions, performAction } from "../engine/actionResolver";
+import { dayOfWeekLabel } from "../engine/calendar";
 import { endDay, setLocation } from "../engine/gameReducer";
 import { resolveEvent } from "../engine/eventResolver";
 import type { GameState } from "../engine/types";
@@ -20,8 +20,8 @@ interface GameScreenProps {
 
 export function GameScreen({ state, setState, onRestart }: GameScreenProps) {
   const location = locations.find((item) => item.id === state.currentLocationId) ?? locations[0];
-  const availableActions = getAvailableActions(state);
-  const lockedActionCount = actions.filter((action) => action.locationId === state.currentLocationId).length - availableActions.length;
+  const actionOptions = getLocationActionOptions(state);
+  const lockedActionCount = actionOptions.filter((option) => !option.available).length;
 
   return (
     <main className="game-shell">
@@ -30,7 +30,7 @@ export function GameScreen({ state, setState, onRestart }: GameScreenProps) {
       <section className="main-panel">
         <div className="day-card">
           <div>
-            <p className="eyebrow">第 {state.day} 天 · {periodLabel(state.period)}</p>
+            <p className="eyebrow">第 {state.day} 天 · {dayOfWeekLabel(state.day)} · {periodLabel(state.period)}</p>
             <h1>{location.name}</h1>
             <p>{location.description}</p>
           </div>
@@ -57,7 +57,7 @@ export function GameScreen({ state, setState, onRestart }: GameScreenProps) {
         />
 
         <ActionPanel
-          actions={availableActions}
+          options={actionOptions}
           lockedActionCount={lockedActionCount}
           disabled={Boolean(state.pendingEventId) || state.actionPoints <= 0}
           onAction={(actionId) => setState(performAction(state, actionId))}

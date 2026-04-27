@@ -3,6 +3,13 @@ import type { GameAction, GameState, Period, RouteScores } from "./types";
 import { addLog, applyEffects, meetsRequirements } from "./effects";
 import { pickRandomEvent } from "./eventResolver";
 import { enforceCriticalCollapse } from "./critical";
+import { isWeekend } from "./calendar";
+
+export interface ActionOption {
+  action: GameAction;
+  available: boolean;
+  reason?: string;
+}
 
 const periodByActionPoints: Record<number, Period> = {
   3: "morning",
@@ -12,9 +19,24 @@ const periodByActionPoints: Record<number, Period> = {
 };
 
 export function getAvailableActions(state: GameState): GameAction[] {
-  return actions.filter(
-    (action) => action.locationId === state.currentLocationId && meetsRequirements(state, action.requirements),
-  );
+  return getLocationActionOptions(state)
+    .filter((option) => option.available)
+    .map((option) => option.action);
+}
+
+export function getLocationActionOptions(state: GameState): ActionOption[] {
+  return actions
+    .filter((action) => action.locationId === state.currentLocationId)
+    .map((action) => {
+      const availabilityReason = getAvailabilityReason(state, action);
+      const requirementReason = meetsRequirements(state, action.requirements) ? undefined : "前置条件不足";
+      const reason = availabilityReason ?? requirementReason;
+      return {
+        action,
+        available: !reason,
+        reason,
+      };
+    });
 }
 
 export function getAction(actionId: string): GameAction | undefined {
@@ -24,7 +46,7 @@ export function getAction(actionId: string): GameAction | undefined {
 export function performAction(state: GameState, actionId: string): GameState {
   if (state.pendingEventId || state.endingId || state.actionPoints <= 0) return state;
   const action = getAction(actionId);
-  if (!action || !meetsRequirements(state, action.requirements)) return state;
+  if (!action || !meetsRequirements(state, action.requirements) || getAvailabilityReason(state, action)) return state;
 
   let next = applyEffects(state, action.effects);
 
@@ -55,4 +77,20 @@ export function performAction(state: GameState, actionId: string): GameState {
   }
 
   return next;
+}
+
+function getAvailabilityReason(state: GameState, action: GameAction): string | undefined {
+  const availability = action.availability;
+  if (!availability) return undefined;
+  const weekend = isWeekend(state.day);
+  const defaultReason = availability.reason ?? "当前时间不适合做这件事";
+
+  if (availability.weekdaysOnly && weekend) return defaultReason;
+  if (availability.weekendsOnly && !weekend) return defaultReason;
+
+  const periodRules = weekend ? availability.weekendPeriods : availability.weekdayPeriods;
+  if (periodRules && !periodRules.includes(state.period)) return defaultReason;
+  if (!periodRules && availability.periods && !availability.periods.includes(state.period)) return defaultReason;
+
+  return undefined;
 }

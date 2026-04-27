@@ -439,6 +439,18 @@ button:disabled {
   text-align: left;
 }
 
+.action-card.locked {
+  background: #f1ede4;
+  border-style: dashed;
+}
+
+.locked-reason {
+  color: var(--red);
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
 .action-title {
   color: var(--ink);
   font-weight: 800;

@@ -1,24 +1,31 @@
 import type { Effect, GameAction } from "../engine/types";
+import type { ActionOption } from "../engine/actionResolver";
 
 interface ActionPanelProps {
-  actions: GameAction[];
+  options: ActionOption[];
   lockedActionCount: number;
   disabled: boolean;
   onAction: (actionId: string) => void;
 }
 
-export function ActionPanel({ actions, lockedActionCount, disabled, onAction }: ActionPanelProps) {
+export function ActionPanel({ options, lockedActionCount, disabled, onAction }: ActionPanelProps) {
   return (
     <section className="action-panel">
       <div className="section-heading">
         <h2>可选行动</h2>
-        <span>{lockedActionCount > 0 ? `${lockedActionCount} 个行动条件不足` : "所有行动可选"}</span>
+        <span>{lockedActionCount > 0 ? `${lockedActionCount} 个行动当前不可用` : "所有行动可选"}</span>
       </div>
       <div className="action-list">
-        {actions.map((action) => (
-          <button className="action-card" key={action.id} disabled={disabled} onClick={() => onAction(action.id)}>
+        {options.map(({ action, available, reason }) => (
+          <button
+            className={available ? "action-card" : "action-card locked"}
+            key={action.id}
+            disabled={disabled || !available}
+            onClick={() => onAction(action.id)}
+          >
             <span className="action-title">{action.name}</span>
             <span className="action-desc">{action.description}</span>
+            {!available && <span className="locked-reason">{reason}</span>}
             <span className="effect-line">{summarizeEffects(action.effects, action.routeScoreEffects)}</span>
           </button>
         ))}
