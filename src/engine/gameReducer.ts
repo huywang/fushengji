@@ -5,11 +5,13 @@ import { addLog, applyEffect } from "./effects";
 import { pickRandomEvent } from "./eventResolver";
 import { enforceCriticalCollapse } from "./critical";
 import { BILL_DAYS, COUNTDOWN_DAYS, MORTGAGE_DAYS, TOTAL_DAYS } from "./calendar";
+import { refreshOpportunities } from "./opportunityResolver";
+import { settleDueReceivables } from "./receivables";
 
 const nextDayPeriod: Period = "morning";
 
 export function newGame(): GameState {
-  return createInitialState();
+  return refreshOpportunities(createInitialState());
 }
 
 export function setLocation(state: GameState, locationId: string): GameState {
@@ -96,7 +98,8 @@ function applyMidMonthBills(state: GameState): GameState {
 }
 
 function applyStartOfDaySpecials(state: GameState): GameState {
-  let next = applyMortgage(state);
+  let next = settleDueReceivables(state);
+  next = applyMortgage(next);
   next = applyMidMonthBills(next);
   if (COUNTDOWN_DAYS.includes(next.day) && !next.flags[`next_mortgage_countdown_logged_${next.day}`]) {
     next = applyEffect(next, { type: "stat", key: "mortgagePressure", delta: 8 });
@@ -137,6 +140,7 @@ export function endDay(state: GameState): GameState {
   };
 
   next = applyStartOfDaySpecials(next);
+  next = refreshOpportunities(next);
   next = enforceCriticalCollapse(next);
   if (next.endingId || next.pendingEventId) return next;
 

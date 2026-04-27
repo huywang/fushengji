@@ -53,6 +53,9 @@ export function createInitialState(): GameState {
     period: "morning",
     actionPoints: 3,
     currentLocationId: "huilongguan",
+    activeOpportunities: [],
+    completedOpportunityIds: [],
+    receivables: [],
     player: structuredClone(initialPlayer),
     flags: {},
     history: [
@@ -72,15 +75,32 @@ export function createInitialState(): GameState {
 }
 
 export function normalizeGameState(state: GameState): GameState {
+  const savedPlayer = state.player ?? initialPlayer;
   return {
-    ...state,
+    day: state.day ?? 1,
+    period: state.period ?? "morning",
+    actionPoints: state.actionPoints ?? 3,
+    currentLocationId: state.currentLocationId ?? "huilongguan",
+    activeOpportunities: Array.isArray(state.activeOpportunities) ? state.activeOpportunities : [],
+    completedOpportunityIds: Array.isArray(state.completedOpportunityIds) ? state.completedOpportunityIds : [],
+    receivables: Array.isArray(state.receivables) ? state.receivables : [],
     player: {
       ...structuredClone(initialPlayer),
-      ...state.player,
+      ...savedPlayer,
       skills: {
         ...initialPlayer.skills,
-        ...state.player.skills,
+        ...(savedPlayer.skills ?? {}),
       },
     },
+    flags: state.flags ?? {},
+    history: Array.isArray(state.history) ? state.history : [],
+    routeScores: {
+      ...initialRouteScores,
+      ...(state.routeScores ?? {}),
+    },
+    triggeredEventIds: Array.isArray(state.triggeredEventIds) ? state.triggeredEventIds : [],
+    pendingEventId: state.pendingEventId,
+    lastEventResult: state.lastEventResult,
+    endingId: state.endingId,
   };
 }

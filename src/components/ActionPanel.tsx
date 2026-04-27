@@ -38,7 +38,9 @@ function summarizeEffects(effects: Effect[], routeEffects?: GameAction["routeSco
   const pieces = effects
     .filter((effect) => effect.delta)
     .slice(0, 4)
-    .map((effect) => `${label(effect.key)} ${signed(effect.delta ?? 0)}`);
+    .map((effect) => effect.type === "receivable"
+      ? `应收尾款 ¥${(effect.delta ?? 0).toLocaleString("zh-CN")} / ${effect.probability ?? 60}%`
+      : `${label(effect.key)} ${signed(effect.delta ?? 0)}`);
   if (routeEffects) {
     const route = Object.entries(routeEffects)[0];
     if (route) pieces.push(`${routeLabel(route[0])} +${route[1]}`);

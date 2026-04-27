@@ -57,6 +57,22 @@ export function addLog(state: GameState, title: string, text: string, kind: Game
 
 export function applyEffect(state: GameState, effect: Effect): GameState {
   const next: GameState = structuredClone(state);
+  if (effect.type === "receivable") {
+    const amount = Math.max(0, Math.round(effect.delta ?? 0));
+    if (amount <= 0) return next;
+    next.receivables = [
+      ...(next.receivables ?? []),
+      {
+        id: `${effect.key}_${state.day}_${Date.now()}_${Math.random().toString(16).slice(2)}`,
+        title: effect.text ?? effect.key,
+        dueDay: state.day + Math.max(1, Math.round(effect.dueInDays ?? 7)),
+        amount,
+        probability: Math.round(Math.min(100, Math.max(0, effect.probability ?? 60))),
+        source: effect.key,
+      },
+    ];
+    return next;
+  }
   if (effect.type === "stat" || effect.type === "cash") {
     const key = effect.key as keyof PlayerState;
     const current = Number(next.player[key] ?? 0);

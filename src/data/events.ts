@@ -258,8 +258,8 @@ export const events: EventCard[] = [
     trigger: { randomWeight: 4 },
     body: "甲方说：“这个需求很简单，你应该半天就能做完。”简单，是甲方对价格的形容词。",
     options: [
-      { id: "endure", text: "忍了，继续做", resultText: "你赚到了钱，也被需求又改了一遍。", effects: [{ type: "cash", key: "availableCash", delta: 2000 }, { type: "stat", key: "stamina", delta: -15 }, { type: "stat", key: "emotion", delta: -8 }, { type: "route", key: "freelance", delta: 4 }] },
-      { id: "raise", text: "要求加钱", resultText: "你开口了。对方沉默三秒后说：那先加 1500。", effects: [{ type: "stat", key: "midlifeThickSkin", delta: 3 }, { type: "cash", key: "availableCash", delta: 1500 }, { type: "route", key: "freelance", delta: 2 }] },
+      { id: "endure", text: "忍了，继续做", resultText: "你先拿到 900 首款，也被需求又改了一遍。尾款被放进一个叫“流程”的抽屉里。", effects: [{ type: "cash", key: "availableCash", delta: 900 }, { type: "stat", key: "cash", delta: 900 }, { type: "receivable", key: "outsource_change_tail", delta: 1600, dueInDays: 7, probability: 52, text: "改需求外包尾款" }, { type: "stat", key: "stamina", delta: -15 }, { type: "stat", key: "emotion", delta: -8 }, { type: "route", key: "freelance", delta: 4 }] },
+      { id: "raise", text: "要求加钱", resultText: "你开口了。对方沉默三秒后说：那先加 600，剩下交付后结。", effects: [{ type: "stat", key: "midlifeThickSkin", delta: 3 }, { type: "cash", key: "availableCash", delta: 600 }, { type: "stat", key: "cash", delta: 600 }, { type: "receivable", key: "outsource_raise_tail", delta: 1200, dueInDays: 6, probability: 60, text: "外包加价尾款" }, { type: "route", key: "freelance", delta: 2 }] },
       { id: "reject", text: "直接拒绝", resultText: "这单没了，但你睡得早了一点。", effects: [{ type: "stat", key: "dignity", delta: 3 }, { type: "route", key: "freelance", delta: -2 }, { type: "stat", key: "emotion", delta: 2 }] },
     ],
   },
@@ -372,7 +372,7 @@ export const events: EventCard[] = [
     options: [
       { id: "continue", text: "继续加入", resultText: "你把风险叫作机会。", effects: [{ type: "route", key: "startup", delta: 8 }, { type: "stat", key: "mortgagePressure", delta: 10 }] },
       { id: "exit", text: "退出", resultText: "你没有燃烧自己来照亮 BP。", effects: [{ type: "route", key: "startup", delta: -5 }, { type: "stat", key: "mortgagePressure", delta: -3 }] },
-      { id: "advisor", text: "做付费顾问", resultText: "创业朋友终于听懂了你说的现金流。", effects: [{ type: "route", key: "freelance", delta: 6 }, { type: "stat", key: "midlifeThickSkin", delta: 3 }, { type: "cash", key: "availableCash", delta: 3000 }] },
+      { id: "advisor", text: "做付费顾问", resultText: "创业朋友终于听懂了你说的现金流：先转 1000，剩下交付后结。", effects: [{ type: "route", key: "freelance", delta: 6 }, { type: "stat", key: "midlifeThickSkin", delta: 3 }, { type: "cash", key: "availableCash", delta: 1000 }, { type: "stat", key: "cash", delta: 1000 }, { type: "receivable", key: "startup_advisor_tail", delta: 2000, dueInDays: 8, probability: 48, text: "创业顾问尾款" }] },
     ],
   },
   {

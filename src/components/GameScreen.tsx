@@ -3,13 +3,16 @@ import { locations } from "../data/locations";
 import { getLocationActionOptions, performAction } from "../engine/actionResolver";
 import { dayOfWeekLabel } from "../engine/calendar";
 import { endDay, setLocation } from "../engine/gameReducer";
+import { getOpportunityOptions, performOpportunity } from "../engine/opportunityResolver";
 import { resolveEvent } from "../engine/eventResolver";
 import type { GameState } from "../engine/types";
 import { ActionPanel } from "./ActionPanel";
 import { CrisisAgenda } from "./CrisisAgenda";
 import { EventModal } from "./EventModal";
+import { LedgerPanel } from "./LedgerPanel";
 import { LogPanel } from "./LogPanel";
 import { MapPanel } from "./MapPanel";
+import { OpportunityMarket } from "./OpportunityMarket";
 import { StatusPanel } from "./StatusPanel";
 
 interface GameScreenProps {
@@ -21,6 +24,7 @@ interface GameScreenProps {
 export function GameScreen({ state, setState, onRestart }: GameScreenProps) {
   const location = locations.find((item) => item.id === state.currentLocationId) ?? locations[0];
   const actionOptions = getLocationActionOptions(state);
+  const opportunityOptions = getOpportunityOptions(state);
   const lockedActionCount = actionOptions.filter((option) => !option.available).length;
 
   return (
@@ -44,27 +48,39 @@ export function GameScreen({ state, setState, onRestart }: GameScreenProps) {
 
         <CrisisAgenda state={state} />
 
-        <div className="result-strip">
-          <strong>最近结果</strong>
-          <span>{state.lastEventResult ?? state.history[0]?.text ?? "选择行动后，这里会显示新的变化。"}</span>
-        </div>
+        <section className="interaction-stage">
+          <OpportunityMarket
+            state={state}
+            options={opportunityOptions}
+            disabled={Boolean(state.pendingEventId) || state.actionPoints <= 0}
+            onTake={(cardId) => setState(performOpportunity(state, cardId))}
+          />
 
-        <MapPanel
-          locations={locations}
-          currentLocationId={state.currentLocationId}
-          disabled={Boolean(state.pendingEventId)}
-          onSelect={(locationId) => setState(setLocation(state, locationId))}
-        />
+          <div className="city-ops">
+            <div className="result-strip">
+              <strong>刚刚发生</strong>
+              <span>{state.lastEventResult ?? state.history[0]?.text ?? "选择行动后，这里会显示新的变化。"}</span>
+            </div>
 
-        <ActionPanel
-          options={actionOptions}
-          lockedActionCount={lockedActionCount}
-          disabled={Boolean(state.pendingEventId) || state.actionPoints <= 0}
-          onAction={(actionId) => setState(performAction(state, actionId))}
-        />
+            <MapPanel
+              locations={locations}
+              currentLocationId={state.currentLocationId}
+              disabled={Boolean(state.pendingEventId)}
+              onSelect={(locationId) => setState(setLocation(state, locationId))}
+            />
+
+            <ActionPanel
+              options={actionOptions}
+              lockedActionCount={lockedActionCount}
+              disabled={Boolean(state.pendingEventId) || state.actionPoints <= 0}
+              onAction={(actionId) => setState(performAction(state, actionId))}
+            />
+          </div>
+        </section>
       </section>
 
       <aside className="side-panel">
+        <LedgerPanel state={state} />
         <LogPanel entries={state.history} />
       </aside>
 

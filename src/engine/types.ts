@@ -65,6 +65,9 @@ export interface GameState {
   period: Period;
   actionPoints: number;
   currentLocationId: string;
+  activeOpportunities: ActiveOpportunity[];
+  completedOpportunityIds: string[];
+  receivables: Receivable[];
   player: PlayerState;
   flags: Record<string, FlagValue>;
   history: LogEntry[];
@@ -86,11 +89,22 @@ export type PlayerStatKey = Exclude<keyof PlayerState, "skills">;
 export type StatKey = PlayerStatKey | keyof SkillState;
 
 export interface Effect {
-  type: "stat" | "cash" | "flag" | "route" | "skill";
+  type: "stat" | "cash" | "flag" | "route" | "skill" | "receivable";
   key: string;
   delta?: number;
   value?: FlagValue;
   text?: string;
+  dueInDays?: number;
+  probability?: number;
+}
+
+export interface Receivable {
+  id: string;
+  title: string;
+  dueDay: number;
+  amount: number;
+  probability: number;
+  source: string;
 }
 
 export interface Requirement {
@@ -118,6 +132,44 @@ export interface ActionAvailability {
   weekdaysOnly?: boolean;
   weekendsOnly?: boolean;
   reason?: string;
+}
+
+export type OpportunitySource = "job" | "freelance" | "trade" | "family" | "policy" | "gig" | "selfMedia" | "asset" | "trap";
+
+export interface ActiveOpportunity {
+  id: string;
+  createdDay: number;
+  expiresOnDay: number;
+}
+
+export interface OpportunityOutcome {
+  id: string;
+  label: string;
+  weight: number;
+  resultText: string;
+  effects: Effect[];
+  routeScoreEffects?: Partial<RouteScores>;
+  possibleEventIds?: string[];
+}
+
+export interface OpportunityCard {
+  id: string;
+  title: string;
+  source: OpportunitySource;
+  description: string;
+  flavor: string;
+  expiresInDays: number;
+  riskLevel: 1 | 2 | 3 | 4 | 5;
+  weight?: number;
+  unique?: boolean;
+  availability?: ActionAvailability;
+  requirements?: Requirement[];
+  effects: Effect[];
+  outcomes?: OpportunityOutcome[];
+  possibleEventIds?: string[];
+  routeScoreEffects?: Partial<RouteScores>;
+  rewardLabel: string;
+  costLabel: string;
 }
 
 export interface EventTrigger {

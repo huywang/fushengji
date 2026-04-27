@@ -4,6 +4,7 @@ import { GameScreen } from "./components/GameScreen";
 import { EndingScreen } from "./components/EndingScreen";
 import { normalizeGameState } from "./data/initialState";
 import { newGame } from "./engine/gameReducer";
+import { refreshOpportunities } from "./engine/opportunityResolver";
 import { clearSave, loadGame, saveGame } from "./engine/storage";
 import type { GameState } from "./engine/types";
 import { enforceCriticalCollapse } from "./engine/critical";
@@ -11,7 +12,7 @@ import { enforceCriticalCollapse } from "./engine/critical";
 export default function App() {
   const [state, setState] = useState<GameState | null>(() => {
     const saved = loadGame();
-    return saved ? enforceCriticalCollapse(normalizeGameState(saved)) : null;
+    return saved ? enforceCriticalCollapse(refreshOpportunities(normalizeGameState(saved))) : null;
   });
   const hasExistingSave = useMemo(() => Boolean(loadGame()), [state]);
 
@@ -34,7 +35,7 @@ export default function App() {
 
   const continueGame = () => {
     const saved = loadGame();
-    if (saved) setState(enforceCriticalCollapse(normalizeGameState(saved)));
+    if (saved) setState(enforceCriticalCollapse(refreshOpportunities(normalizeGameState(saved))));
   };
 
   const restart = () => startNew();

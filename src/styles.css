@@ -139,6 +139,8 @@ button:disabled {
 .day-card,
 .map-panel,
 .action-panel,
+.opportunity-panel,
+.ledger-panel,
 .log-panel,
 .result-strip,
 .event-modal {
@@ -242,6 +244,18 @@ button:disabled {
 }
 
 .main-panel {
+  display: grid;
+  gap: 16px;
+}
+
+.interaction-stage {
+  align-items: start;
+  display: grid;
+  gap: 16px;
+  grid-template-columns: minmax(330px, 0.82fr) minmax(0, 1fr);
+}
+
+.city-ops {
   display: grid;
   gap: 16px;
 }
@@ -402,6 +416,8 @@ button:disabled {
 
 .map-panel,
 .action-panel,
+.opportunity-panel,
+.ledger-panel,
 .log-panel {
   padding: 16px;
 }
@@ -429,6 +445,205 @@ button:disabled {
   display: grid;
   gap: 10px;
   grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.opportunity-panel {
+  background: #18191c;
+  border-color: #2d3035;
+  color: #f7f2e8;
+  overflow: hidden;
+  padding: 10px;
+}
+
+.phone-shell {
+  display: grid;
+  gap: 12px;
+}
+
+.phone-status,
+.phone-header,
+.message-topline,
+.message-footer {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.phone-status {
+  color: rgba(247, 242, 232, 0.62);
+  font-size: 0.76rem;
+  font-weight: 800;
+  padding: 2px 6px;
+}
+
+.phone-header {
+  background: #24262b;
+  border: 1px solid #3a3d44;
+  border-radius: 8px;
+  gap: 12px;
+  padding: 12px;
+}
+
+.phone-header h2 {
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+.unread-count {
+  align-items: center;
+  background: var(--red);
+  border-radius: 999px;
+  color: #fff;
+  display: inline-flex;
+  font-size: 0.82rem;
+  font-weight: 900;
+  height: 30px;
+  justify-content: center;
+  min-width: 30px;
+  padding: 0 8px;
+}
+
+.system-alerts,
+.opportunity-list {
+  display: grid;
+  gap: 8px;
+}
+
+.system-alert {
+  background: #24262b;
+  border: 1px solid #3a3d44;
+  border-left: 4px solid #6a707a;
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+
+.system-alert.danger {
+  border-left-color: var(--red);
+}
+
+.system-alert.warning {
+  border-left-color: var(--amber);
+}
+
+.system-alert span {
+  color: #aeb6c1;
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 900;
+  margin-bottom: 4px;
+}
+
+.system-alert strong {
+  color: #fff8e9;
+  font-size: 0.9rem;
+}
+
+.system-alert p {
+  color: rgba(247, 242, 232, 0.72);
+  font-size: 0.82rem;
+  line-height: 1.5;
+  margin: 5px 0 0;
+}
+
+.opportunity-card {
+  align-content: start;
+  background: #f8f4eb;
+  border-color: #efe3d1;
+  color: var(--ink);
+  display: grid;
+  gap: 7px;
+  min-height: 0;
+  overflow: hidden;
+  position: relative;
+  text-align: left;
+}
+
+.opportunity-card::before {
+  content: "";
+  inset: 0 auto 0 0;
+  position: absolute;
+  width: 5px;
+}
+
+.opportunity-card.risk-1::before,
+.opportunity-card.risk-2::before {
+  background: var(--green);
+}
+
+.opportunity-card.risk-3::before {
+  background: var(--amber);
+}
+
+.opportunity-card.risk-4::before,
+.opportunity-card.risk-5::before {
+  background: var(--red);
+}
+
+.opportunity-card.locked {
+  background: #34363b;
+  color: #f7f2e8;
+  border-style: dashed;
+}
+
+.message-topline,
+.message-footer {
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 800;
+  gap: 8px;
+}
+
+.message-footer {
+  align-items: flex-start;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  line-height: 1.35;
+}
+
+.app-badge {
+  background: #e7efe6;
+  border-radius: 999px;
+  color: #315d42;
+  padding: 3px 7px;
+}
+
+.opportunity-title {
+  color: var(--ink);
+  font-size: 1rem;
+  font-weight: 900;
+  line-height: 1.35;
+}
+
+.opportunity-flavor {
+  color: #55514a;
+  font-size: 0.84rem;
+  line-height: 1.5;
+}
+
+.deal-line {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+}
+
+.deal-line strong {
+  color: var(--green);
+  font-size: 0.9rem;
+}
+
+.deal-line span {
+  color: var(--muted);
+  font-size: 0.78rem;
+  text-align: right;
+}
+
+.empty-inbox {
+  color: rgba(247, 242, 232, 0.7);
+  font-size: 0.88rem;
+  line-height: 1.6;
+  margin: 0;
+  padding: 8px 4px 4px;
 }
 
 .action-card {
@@ -466,9 +681,140 @@ button:disabled {
 }
 
 .side-panel {
+  display: grid;
+  gap: 16px;
   align-self: start;
   position: sticky;
   top: 16px;
+}
+
+.ledger-panel {
+  background: #f7fbff;
+  border-color: #cbd8e2;
+}
+
+.ledger-summary {
+  align-items: center;
+  border-bottom: 1px solid #d3dde5;
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 12px;
+}
+
+.ledger-summary span,
+.ledger-entry span,
+.ledger-entry em,
+.empty-ledger {
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-style: normal;
+}
+
+.ledger-summary strong {
+  font-size: 1.1rem;
+}
+
+.danger-text {
+  color: var(--red);
+}
+
+.cash-radar {
+  display: grid;
+  gap: 5px;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  margin-top: 12px;
+}
+
+.radar-day {
+  align-items: center;
+  background: #edf3f8;
+  border: 1px solid #d4dde5;
+  border-radius: 8px;
+  display: grid;
+  gap: 2px;
+  min-height: 42px;
+  padding: 5px;
+  text-align: center;
+}
+
+.radar-day span {
+  color: #4e5963;
+  font-size: 0.72rem;
+  font-weight: 900;
+}
+
+.radar-day i {
+  border-radius: 999px;
+  color: #fff;
+  display: inline-grid;
+  font-size: 0.68rem;
+  font-style: normal;
+  font-weight: 900;
+  height: 18px;
+  margin: 0 auto;
+  min-width: 18px;
+  place-items: center;
+}
+
+.radar-day.danger {
+  background: #fff0ec;
+  border-color: #e3afa6;
+}
+
+.radar-day.risk {
+  background: #fff7e7;
+  border-color: #e2c891;
+}
+
+.radar-day.income {
+  background: #edf6ef;
+  border-color: #b9d1bd;
+}
+
+.radar-day.danger i {
+  background: var(--red);
+}
+
+.radar-day.risk i {
+  background: var(--amber);
+}
+
+.radar-day.income i {
+  background: var(--green);
+}
+
+.ledger-list {
+  display: grid;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.ledger-entry {
+  border-left: 3px solid #9eb4c5;
+  display: grid;
+  gap: 3px;
+  padding: 5px 0 5px 10px;
+}
+
+.ledger-entry.expense {
+  border-left-color: var(--red);
+}
+
+.ledger-entry.income {
+  border-left-color: var(--green);
+}
+
+.ledger-entry.risk {
+  border-left-color: var(--amber);
+}
+
+.ledger-entry strong {
+  font-size: 0.9rem;
+}
+
+.empty-ledger {
+  line-height: 1.55;
+  margin: 0;
 }
 
 .log-list {
@@ -564,6 +910,10 @@ button:disabled {
     grid-template-columns: 260px minmax(0, 1fr);
   }
 
+  .interaction-stage {
+    grid-template-columns: 1fr;
+  }
+
   .side-panel {
     grid-column: 1 / -1;
     position: static;
@@ -582,6 +932,10 @@ button:disabled {
 
   .status-panel {
     position: static;
+  }
+
+  .interaction-stage {
+    grid-template-columns: 1fr;
   }
 
   .day-card,
